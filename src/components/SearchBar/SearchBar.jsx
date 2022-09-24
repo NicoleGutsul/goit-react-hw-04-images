@@ -1,44 +1,44 @@
-import { Component } from "react";
+import { useState } from "react";
 import { BarSearch, FormSearch } from "./SearchBar.styled";
 
-export default class SearchBar extends Component {
-    state = {
-        inputFilter: '',
-    };
+export const SearchBar = ({ onSubmit }) => {
+    const [input, setInput] = useState('');
 
-    handleInputChange = e => {
-      this.setState({inputFilter: e.currentTarget.value.toLowerCase() });
-    }
+    const handleInputChange = e => 
+      setInput(e.currentTarget.value.toLowerCase().trim());
+    
 
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        if (this.state.inputFilter.trim() === '') {
+        if (input === '') {
             alert('Введите название');
             return;
         }
-        this.props.onSubmit(this.state.inputFilter);
-        this.setState({inputFilter: '' });
+        onSubmit(input);
+        setInput('');
     };
 
-    render() {
-        return(
-            <BarSearch>
-              <FormSearch onSubmit={this.handleSubmit}>
-                <button type="submit">
-                  Search
-                </button>
+    return(
+        <BarSearch>
+            <FormSearch onSubmit={handleSubmit}>
+              <button type="submit">
+                Search
+              </button>
 
-                <input
-                  className="input"
-                  type="text"
-                  value={this.state.inputFilter}
-                  onChange={this.handleInputChange}
+              <input
+                type="text"
+                autoComplete="off"
+                autoFocus
+                value={input}
+                onChange={handleInputChange}
                   // autocomplete="off"
                   // autofocus
-                  placeholder="Search images and photos"
-                />
-              </FormSearch>
-            </BarSearch>
-        );
-    }
-}
+                placeholder="Search images and photos"
+              />
+            </FormSearch>
+        </BarSearch>
+    );
+    
+};
+
+export default SearchBar;

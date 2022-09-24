@@ -1,23 +1,28 @@
-import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
+import { GalleryItemImage } from "./ImageGalleryItem.styled";
+import { useState } from "react";
+import { Overlay } from "components/Modal/Modal.styled";
 
-const ImageGalleryItem = ({ gallery, onClickModal, getImage }) => {
-    return gallery.map(data => {
-        return (
-            <GalleryItem
-              key={data.id}
-              onClick={() => {
-                onClickModal();
-                getImage(data.webformatURL, data.tags);
-              }}
-            >
-                <GalleryItemImage
-                  src={data.webformatURL}
-                  alt={data.tags}
-                  width="180"
-                />
-            </GalleryItem>
-        )
-    })
-}
+export const ImageGalleryItem = ({ item }) => {
+  const [showModal, setShowModal] = useState(false);
+  const {webformatURL, tags, largeImageURL} = item;
 
+  const toggleModal = () => {
+    setShowModal(prev => !prev);
+  };
+    return (
+      <>
+      <GalleryItemImage
+        src={webformatURL}
+        alt={tags}
+        width="180"
+        onClick={toggleModal}
+      />
+      {showModal && (
+        <Overlay closeModal={toggleModal}>
+           <img src={largeImageURL} alt={tags}/>
+        </Overlay>
+      )}
+      </>
+    );
+};
 export default ImageGalleryItem;
