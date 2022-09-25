@@ -1,23 +1,28 @@
+import { useState } from "react";
+import Modal from "components/Modal";
 import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 
-const ImageGalleryItem = ({ gallery, onClickModal, getImage }) => {
-    return gallery.map(data => {
-        return (
-            <GalleryItem
-              key={data.id}
-              onClick={() => {
-                onClickModal();
-                getImage(data.webformatURL, data.tags);
-              }}
-            >
-                <GalleryItemImage
-                  src={data.webformatURL}
-                  alt={data.tags}
-                  width="180"
-                />
-            </GalleryItem>
-        )
-    })
-}
+export default function ImageGalleryItem({ image }) {
+  const { webformatURL, tags, largeImageURL } = image;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-export default ImageGalleryItem;
+  const toggleModal = () => {
+    setIsModalOpen(isModalOpen => !isModalOpen);
+}
+   return (
+      <GalleryItem>
+        <GalleryItemImage
+          src={webformatURL}
+          alt={tags}
+          width="180"
+          onClick={toggleModal}
+        />
+        {isModalOpen && (
+        <Modal onClose={toggleModal}>
+          <img src={largeImageURL} alt={tags} />
+        </Modal>
+        )}
+        </GalleryItem>
+        )
+    
+}

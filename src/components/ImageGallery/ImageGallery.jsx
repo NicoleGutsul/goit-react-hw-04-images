@@ -47,11 +47,7 @@ export default class ImageGallery extends Component {
         }
     }
 
-    toggleModal = () => {
-        this.setState(state => ({
-            modal: !state.modal,
-        }));
-    }
+   
 
     getImage = (webformatURL, tags) => {
         this.setState({ currentUrl: webformatURL, currentTags: tags});
