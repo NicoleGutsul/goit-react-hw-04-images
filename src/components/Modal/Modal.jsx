@@ -1,31 +1,36 @@
-import { useEffect } from "react";
+import { Component } from "react";
 import { Overlay, ModalList } from "./Modal.styled";
 
-export const Modal = ({closeModal, children}) => {
+export default class Modal extends Component {
+    componentDidMount() {
+        window.addEventListener('keydown', this.handleKeyDown);
+    }
 
-    useEffect(() => {
-        const handleKeyDown = e => {
-            if (e.code === 'Escape') closeModal();
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [closeModal]);
-   
+    handleKeyDown = e => {
+        if (e.code === 'Escape') {
+            this.props.onClose();
+        }
 
-    const backDropClick = e => {
-        if (e.currentTarget === e.target) 
-        closeModal();     
-    };
+    }
 
-  
-    return (
-        <Overlay onClick={backDropClick}>
-            <ModalList>
-                {children}
-            </ModalList>
-        </Overlay>
-    );
-    
-};
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    backDropClick = e => {
+        if (e.currentTarget === e.target) {
+            this.props.onClose();
+
+        }    
+    }
+
+    render() {
+        return (
+            <Overlay onClick={this.backDropClick}>
+                <ModalList>
+                    <img src={this.props.Url} alt={this.props.Tags}/>
+                </ModalList>
+            </Overlay>
+        )
+    }
+}

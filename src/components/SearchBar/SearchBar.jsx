@@ -1,44 +1,44 @@
-import { useState } from "react";
+import { Component } from "react";
 import { BarSearch, FormSearch } from "./SearchBar.styled";
 
-export const SearchBar = ({ onSubmit }) => {
-    const [input, setInput] = useState('');
+export default class SearchBar extends Component {
+    state = {
+        inputFilter: '',
+    };
 
-    const handleInputChange = e => 
-      setInput(e.currentTarget.value.toLowerCase().trim());
-    
+    handleInputChange = e => {
+      this.setState({inputFilter: e.currentTarget.value.toLowerCase() });
+    }
 
-    const handleSubmit = e => {
+    handleSubmit = e => {
         e.preventDefault();
-        if (input === '') {
+        if (this.state.inputFilter.trim() === '') {
             alert('Введите название');
             return;
         }
-        onSubmit(input);
-        setInput('');
+        this.props.onSubmit(this.state.inputFilter);
+        this.setState({inputFilter: '' });
     };
 
-    return(
-        <BarSearch>
-            <FormSearch onSubmit={handleSubmit}>
-              <button type="submit">
-                Search
-              </button>
+    render() {
+        return(
+            <BarSearch>
+              <FormSearch onSubmit={this.handleSubmit}>
+                <button type="submit">
+                  Search
+                </button>
 
-              <input
-                type="text"
-                autoComplete="off"
-                autoFocus
-                value={input}
-                onChange={handleInputChange}
+                <input
+                  className="input"
+                  type="text"
+                  value={this.state.inputFilter}
+                  onChange={this.handleInputChange}
                   // autocomplete="off"
                   // autofocus
-                placeholder="Search images and photos"
-              />
-            </FormSearch>
-        </BarSearch>
-    );
-    
-};
-
-export default SearchBar;
+                  placeholder="Search images and photos"
+                />
+              </FormSearch>
+            </BarSearch>
+        );
+    }
+}
