@@ -1,44 +1,40 @@
-import { Component } from "react";
+import { useState } from "react";
 import { BarSearch, FormSearch } from "./SearchBar.styled";
 
-export default class SearchBar extends Component {
-    state = {
-        inputFilter: '',
-    };
+export default function SearchBar({onSubmit}) {
+    const [inputFilter, setInputFilter] = useState('');
 
-    handleInputChange = e => {
-      this.setState({inputFilter: e.currentTarget.value.toLowerCase() });
+    const handleInputChange = e => {
+      setInputFilter(e.target.value.toLowerCase());
     }
 
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        if (this.state.inputFilter.trim() === '') {
-            alert('Введите название');
-            return;
-        }
-        this.props.onSubmit(this.state.inputFilter);
-        this.setState({inputFilter: '' });
+        inputFilter.trim() === '' 
+           ? alert('Введите название')
+           : onSubmit(inputFilter);
+        setInputFilter('');
     };
 
-    render() {
+  
         return(
             <BarSearch>
-              <FormSearch onSubmit={this.handleSubmit}>
+              <FormSearch onSubmit={handleSubmit}>
                 <button type="submit">
                   Search
                 </button>
 
                 <input
-                  className="input"
                   type="text"
-                  value={this.state.inputFilter}
-                  onChange={this.handleInputChange}
-                  // autocomplete="off"
-                  // autofocus
+                  name='inputFilter'
+                  value={inputFilter}
+                  onChange={handleInputChange}
+                  autoComplete="off"
+                  autoFocus
                   placeholder="Search images and photos"
                 />
               </FormSearch>
             </BarSearch>
         );
-    }
+    
 }
