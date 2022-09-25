@@ -103,11 +103,12 @@ export default class ImageGallery extends Component {
                 )}
 
                 {this.state.modal && (
-                    <Modal
-                       Url={this.state.currentUrl}
-                       Tags={this.state.currentTags}
-                       onClose={this.toggleModal}
-                    />
+                    <Modal onClose={this.toggleModal}>
+                       {/* Url={this.state.currentUrl}
+                       Tags={this.state.currentTags} */}
+                       <img src={this.state.currentUrl} alt={this.state.currentTags}/>
+                    </Modal>
+                    
                 )}
 
             </GalleryImage>
