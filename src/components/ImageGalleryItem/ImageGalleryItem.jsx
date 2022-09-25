@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Modal from "components/Modal";
+import PropTypes from 'prop-types';
 import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 
 export default function ImageGalleryItem({ image }) {
@@ -24,5 +25,12 @@ export default function ImageGalleryItem({ image }) {
         )}
         </GalleryItem>
         )
-    
-}
+};
+
+ImageGalleryItem.propTypes = {
+  image: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+  }),
+};
