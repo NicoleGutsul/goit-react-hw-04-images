@@ -1,72 +1,27 @@
-import { useState, useEffect } from "react";
+import React, { Component } from "react";
 import { AppStyled } from "./App.styled";
-import SearchBar from "./SearchBar/SearchBar";
+import SearchBar from "./SearchBar";
 import ImageGallery from "./ImageGallery";
-import FetchData from "./FetchData/FetchData";
-import { LoadMoreBtn } from "./LoadMoreBtn/LoadMoreBtn";
-import { Circles } from "react-loader-spinner";
 
-const App = () => {
-
-  const [inputFilter, setInputFilter] = useState('');
-  const [gallery, setGallery] = useState([]);
-  const [page, setPage] = useState(1);
-  const [status, setStatus] = useState('idle');
-
-  useEffect(() => {
-    if (inputFilter === '') {
-      return;
-    }
-
-    async function fetchImages() {
-      setStatus('pending');
-      const newImages = await FetchData(inputFilter, page);
-      setGallery(prev => [...prev, ...newImages]);
-      setStatus('resolved');
-    }
-
-    fetchImages();
-  }, [inputFilter, page]);
-
-
-  const handleOnSubmit = inputFilter => {
-    setInputFilter(inputFilter);
-    setPage(1);
-    setGallery([]);
+class App extends Component {
+  state = {
+    inputFilter: '',
   };
 
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+  handleOnSubmit = inputFilter => {
+    this.setState({ inputFilter});
   };
 
-
+  render() {
     return(
       <AppStyled>
         <>
-          <SearchBar onSubmit={handleOnSubmit}/>
-          {gallery.length > 0 && 
-             <ImageGallery gallery={gallery} />}
-          {gallery.length > 0 && 
-             status !== 'pending' &&
-             <LoadMoreBtn 
-                 onLoadMore={handleLoadMore} 
-              />
-          }
-          {status === 'pending' &&
-             <Circles
-             height="80"
-             width="80"
-             color="#4fa94d"
-             ariaLabel="circles-loading"
-             wrapperStyle={{}}
-             wrapperClass=""
-             visible={true}
-             />
-          }
+          <SearchBar onSubmit={this.handleOnSubmit}/>
+          <ImageGallery inputFilter={this.state.inputFilter}/>
         </>
       </AppStyled>
     );
+  }
 }
-
 
 export default App;
